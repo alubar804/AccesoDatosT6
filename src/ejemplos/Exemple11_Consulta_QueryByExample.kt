@@ -10,7 +10,7 @@ import classesEmpleat.Empleat
 fun main() {
     val bd = Db4oEmbedded. openFile("Empleats.db4o")
 
-    val patro =  Empleat("")
+    val patro =  Empleat(null)
     patro.departament = 10
     patro.adreca = Adreca (null, null, "Castelló")
 

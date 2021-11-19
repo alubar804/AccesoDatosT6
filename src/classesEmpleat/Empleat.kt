@@ -10,6 +10,6 @@ class Empleat (
     var correus_e: Array<String>?,
     var telefons : Array<Telefon>?
 ) {
-    constructor(nif: String) : this(nif,null,null,null,null,null,null,null,null,null)
+    constructor(nif: String?) : this(nif,null,null,null,null,null,null,null,null,null)
 }
 
