@@ -11,7 +11,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar:///media/serv_alu10216804/jar_files(4)/db4o-8.0.276.16149-core-java5.jar!/" />
+          <root url="jar://$MODULE_DIR$/../jar_files(4)/db4o-8.0.276.16149-core-java5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
