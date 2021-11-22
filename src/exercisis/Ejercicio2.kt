@@ -20,7 +20,7 @@ class PuntGeo(var nom: String,var coord :Coordenades):Serializable{
 
 
 }
-class Ruta (var nom: String, var desnivell: Int, var desnivellAcumulat: Int, var llistaDePunts: MutableList<PuntGeo>): Serializable {
+class Ruta (var nom: String?, var desnivell: Int?, var desnivellAcumulat: Int?, var llistaDePunts: MutableList<PuntGeo> = mutableListOf<PuntGeo>()): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1
     }

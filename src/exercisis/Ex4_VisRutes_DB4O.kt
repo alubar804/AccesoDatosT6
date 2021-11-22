@@ -16,15 +16,16 @@ import javax.swing.JTextField
 import javax.swing.JTable
 import javax.swing.JScrollPane
 
-import util.bd.Ruta
-import util.bd.PuntGeo
+
 import com.db4o.Db4oEmbedded
+import kotlin.system.exitProcess
 
 class FinestraComplet : JFrame() {
     var llista = arrayListOf<Ruta>()
     var numActual = 0
 
     // Declaració de la Base de Dades
+    val bd = Db4oEmbedded. openFile ("Rutes.db4o")
 
     val qNom = JTextField(15)
     val qDesn = JTextField(5)
@@ -78,23 +79,32 @@ class FinestraComplet : JFrame() {
 
         primer.addActionListener {
             // instruccions per a situar-se en la primera ruta, i visualitzar-la
+            numActual=0
+            VisRuta()
 
         }
         anterior.addActionListener {
             // instruccions per a situar-se en la ruta anterior, i visualitzar-la
+            numActual--
+            VisRuta()
 
         }
         seguent.addActionListener {
             // instruccions per a situar-se en la ruta següent, i visualitzar-la
+            numActual++
+            VisRuta()
 
         }
         ultim.addActionListener {
             // instruccions per a situar-se en l'últim ruta, i visualitzar-la
+            numActual=llista.size-1
+            VisRuta()
 
         }
         tancar.addActionListener {
             // instruccions per a tancar la BD i el programa
-
+            bd.close()
+            exitProcess(0);
         }
 
         inicialitzar()
@@ -114,18 +124,44 @@ class FinestraComplet : JFrame() {
 
     fun inicialitzar() {
         // instruccions per a inicialitzar llista i numActual
+        var llistaDePunts= mutableListOf<PuntGeo>()
+        val patro = Ruta(null,null,null,llistaDePunts)
+
+        val llistaBase = bd.queryByExample<Ruta>(patro)
+        for (e in llistaBase) {
+            llista.add(e)
+        }
 
     }
 
     fun VisRuta() {
         // instruccions per a visualitzar la ruta actual (l'índex el tenim en numActual
+        qNom.text=llista[numActual].nom
+        qDesn.text=llista[numActual].desnivell.toString()
+        qDesnAcum.text=llista[numActual].desnivellAcumulat.toString()
+        plenarTaula(llista[numActual].llistaDePunts)
 
         ActivarBotons()
     }
 
     fun ActivarBotons() {
         // instruccions per a activar o desactivar els botons de moviment ( setEnabled(Boolean) )
-
+        if (numActual==0){
+            primer.isEnabled = false
+            anterior.isEnabled = false
+            seguent.isEnabled = true
+            ultim.isEnabled = true
+        }else if (numActual==(llista.size-1)){
+            primer.isEnabled = true
+            anterior.isEnabled = true
+            seguent.isEnabled = false
+            ultim.isEnabled = false
+        }else{
+            primer.isEnabled = true
+            anterior.isEnabled = true
+            seguent.isEnabled = true
+            ultim.isEnabled = true
+        }
     }
 
 }
