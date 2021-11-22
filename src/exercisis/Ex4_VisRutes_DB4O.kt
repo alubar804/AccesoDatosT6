@@ -121,7 +121,21 @@ class FinestraComplet : JFrame() {
         val caps = arrayOf("Nom punt", "Latitud", "Longitud")
         punts.setModel(javax.swing.table.DefaultTableModel(ll, caps))
     }
+    fun Dist(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
 
+        val R = 6378.137 // Radi de la Tierra en km
+        val dLat = rad(lat2 - lat1)
+        val dLong = rad(lon2 - lon1)
+
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong / 2) * Math.sin(dLong / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        val d = R * c
+        return Math.round(d*100.0)/100.0
+    }
+
+    fun rad(x: Double): Double {
+        return x * Math.PI / 180
+    }
     fun inicialitzar() {
         // instruccions per a inicialitzar llista i numActual
         var llistaDePunts= mutableListOf<PuntGeo>()
