@@ -8,9 +8,7 @@ import java.awt.FlowLayout
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.BoxLayout
-import javax.swing.JComboBox
 import javax.swing.JButton
-import javax.swing.JTextArea
 import javax.swing.JLabel
 import javax.swing.JTextField
 import javax.swing.JTable
@@ -18,6 +16,7 @@ import javax.swing.JScrollPane
 
 
 import com.db4o.Db4oEmbedded
+import kotlin.math.abs
 import kotlin.system.exitProcess
 
 class FinestraComplet : JFrame() {
@@ -37,6 +36,8 @@ class FinestraComplet : JFrame() {
     val ultim = JButton(" >> ")
     val tancar = JButton("Tancar")
 
+    val qDist = JTextField(15)
+
     init {
         defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         setTitle("JDBC: Visualitzar Rutes Complet")
@@ -54,7 +55,12 @@ class FinestraComplet : JFrame() {
         panell1.add(JLabel("Desnivell acumulat:"))
         qDesnAcum.setEditable(false)
         panell1.add(qDesnAcum)
+        panell1.add(JLabel("Distancia:"))
+        qDist.setEditable(false)
+        panell1.add(qDist)
+
         panell1.add(JLabel("Punts:"))
+
 
         val panell2 = JPanel(GridLayout(0, 1))
         punts.setEnabled(false)
@@ -121,6 +127,23 @@ class FinestraComplet : JFrame() {
         val caps = arrayOf("Nom punt", "Latitud", "Longitud")
         punts.setModel(javax.swing.table.DefaultTableModel(ll, caps))
     }
+    fun calcDist(ll_punts: MutableList<PuntGeo>):Double{
+        var laDist:Double=0.0
+        var prevLat=ll_punts.get(0).coord.latitud
+        var prevLon= ll_punts.get(0).coord.longitud
+        var actLat=ll_punts.get(0).coord.latitud
+        var actLon= ll_punts.get(0).coord.longitud
+
+        for (i in 0 until ll_punts.size) {
+            actLat = ll_punts.get(i).coord.latitud
+            actLon = ll_punts.get(i).coord.longitud
+            laDist+=Dist(prevLat,prevLon,actLat,actLon)
+
+            prevLat=actLat
+            prevLon=actLon
+        }
+        return laDist
+    }
     fun Dist(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
 
         val R = 6378.137 // Radi de la Tierra en km
@@ -154,7 +177,7 @@ class FinestraComplet : JFrame() {
         qDesn.text=llista[numActual].desnivell.toString()
         qDesnAcum.text=llista[numActual].desnivellAcumulat.toString()
         plenarTaula(llista[numActual].llistaDePunts)
-
+        qDist.text=calcDist(llista[numActual].llistaDePunts).toString()+" Km"
         ActivarBotons()
     }
 
